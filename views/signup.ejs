@@ -1,0 +1,54 @@
+<% 
+const prev_value = (field_name) => {
+    if(typeof prev_values !== 'undefined'){
+        return prev_values[field_name] ? prev_values[field_name] : "";
+    }
+    return "";
+}
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Sign Up</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+    <style>
+        .err-msg {
+            color: #ff4137;
+        }
+        .err-input {
+            border: 1px solid #ff4137 !important;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sign Up</h1>
+    <form action="" method="POST" novalidate>
+        <label for="userName">Name: <span class="err-msg username"></span></label>
+        <input type="text" name="username" required id="userName" placeholder="Enter your name" value="<%- prev_value("username"); %>">
+        <label for="userEmail">Email: <span class="err-msg email"></span></label>
+        <input type="email" name="email" required id="userEmail" placeholder="Enter your email" value="<%- prev_value("email"); %>">
+        <label for="userPass">Password: <span class="err-msg password"></span></label>
+        <input type="password" name="password" required id="userPass" placeholder="Enter new password" value="<%- prev_value("password"); %>">
+        <% if(typeof success !== "undefined" && success){ %>
+        <p>You have successfully signed up. <a href="/login">Login</a></p>
+        <% } else{ %><br><% } %>
+        <button type="submit">Sign Up</button> <a href="/login">Login</a>
+    </form>
+    <% if(typeof validation_errors !== "undefined"){ %>
+    <script>
+        let spanItem;
+        let item;
+        const errs = <%- validation_errors %>;
+
+        for (const property in errs) {
+            spanItem = document.querySelector(`.err-msg.${property}`);
+            item = document.querySelector(`[name="${property}"]`);
+            item.classList.add('err-input');
+            spanItem.innerText = errs[property];
+        }
+    </script>
+    <% } %>
+</body>
+</html>
